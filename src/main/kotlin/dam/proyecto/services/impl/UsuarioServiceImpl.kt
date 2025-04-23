@@ -9,13 +9,13 @@ import org.springframework.stereotype.Service
 
 @Service
 class UsuarioServiceImpl(
-    private val repositorioUsuario: UsuarioRepository,
+    private val usuarioRepository: UsuarioRepository,
     private val usuarioMapper: UsuarioMapper
 
 ) : UsuarioService {
 
     override fun obtenerUsuarioPorEmail(email: String): UsuarioLoginDto? {
-        val usuario = repositorioUsuario.findUsuarioByEmail(email) ?: return null
+        val usuario = usuarioRepository.findUsuarioByEmail(email) ?: return null
 
         return UsuarioLoginDto(
             email = requireNotNull(usuario.email),
@@ -26,7 +26,7 @@ class UsuarioServiceImpl(
 
     override fun registrar(usuarioRegistroDto: UsuarioRegistroDto): UsuarioRegistroDto? {
         val usuarioEntity = usuarioMapper.toRegistroEntity(usuarioRegistroDto)
-        val guardado = repositorioUsuario.save(usuarioEntity)
+        val guardado = usuarioRepository.save(usuarioEntity)
         return usuarioMapper.toRegistroDto(guardado)
     }
 }

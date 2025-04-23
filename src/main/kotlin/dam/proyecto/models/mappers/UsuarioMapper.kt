@@ -2,7 +2,9 @@ package dam.proyecto.models.mappers
 
 import dam.proyecto.models.dtos.UsuarioRegistroDto
 import dam.proyecto.models.entities.Usuario
-import org.mapstruct.*
+import org.mapstruct.Mapper
+import org.mapstruct.MappingConstants
+import org.mapstruct.ReportingPolicy
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
 abstract class UsuarioMapper {

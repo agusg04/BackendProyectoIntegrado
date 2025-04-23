@@ -11,7 +11,7 @@ import java.time.Instant
 @Service
 class AuthService(
     private val userService: UsuarioService,
-    //private val jwtService: JwtService,
+    private val jwtService: JwtService,
     private val passwordEncoder: PasswordEncoder
 ) {
     private val logger = LoggerFactory.getLogger(AuthService::class.java)
@@ -20,7 +20,7 @@ class AuthService(
         val email = request.email
         val password = request.password
 
-        if (email.isNullOrBlank() || password.isNullOrBlank()) {
+        if (email.isBlank() || password.isBlank()) {
             return ApiResponse(
                 success = false,
                 message = "Por favor, complete todos los campos"
@@ -42,7 +42,7 @@ class AuthService(
 
         logger.info("Usuario conectado: ${usuario.nombre}")
 
-        val token = "hola" // TODO: implementar generación de token JWT
+        val token = jwtService.generateToken(usuario.email)
 
         return ApiResponse(
             success = true,
@@ -56,7 +56,7 @@ class AuthService(
                 request.name, request.lastName1,
                 request.lastName2, request.email,
                 request.password
-            ).any { it.isNullOrBlank() }
+            ).any { it.isBlank() }
         ) {
             return ApiResponse(success = false, message = "Por favor, complete todos los campos")
         }
@@ -89,4 +89,24 @@ class AuthService(
             )
         )
     }
+
+    fun logout(token: String): ApiResponse<String> {
+        if (!token.startsWith("Bearer ")) {
+            return ApiResponse(
+                success = false,
+                message = "Formato de token no válido"
+            )
+        }
+
+        val rawToken = token.removePrefix("Bearer ").trim()
+
+        logger.info("Token invalidado: $rawToken")
+
+        return ApiResponse(
+            success = true,
+            message = "Sesión cerrada correctamente",
+            data = "Logout exitoso"
+        )
+    }
+
 }
