@@ -5,7 +5,7 @@ import jakarta.persistence.*
 import lombok.Data
 import org.hibernate.annotations.OnDelete
 import org.hibernate.annotations.OnDeleteAction
-import java.time.Instant
+import java.time.LocalDateTime
 
 @Entity
 @Table(name = "fotografias")
@@ -19,7 +19,7 @@ open class Fotografia {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_usuario", nullable = false)
-    open var idUsuario: Usuario? = null
+    open var usuario: Usuario? = null
 
     @Column(name = "titulo", nullable = false, length = 45)
     open var titulo: String? = null
@@ -27,11 +27,11 @@ open class Fotografia {
     @Column(name = "descripcion", length = 255)
     open var descripcion: String? = null
 
-    @Column(name = "url", nullable = false, length = 255)
-    open var url: String? = null
+    @Column(name = "file_path", nullable = false, length = 255)
+    open var filePath: String? = null
 
     @Column(name = "fecha_subida", nullable = false)
-    open var fechaSubida: Instant? = null
+    open var fechaSubida: LocalDateTime? = null
 
     @Enumerated(EnumType.STRING)
     @Column(name = "estado", nullable = false)
@@ -45,17 +45,17 @@ open class Fotografia {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.SET_NULL)
-    @JoinColumn(name = "validador")
+    @JoinColumn(name = "id_validador")
     open var validador: Usuario? = null
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_rally", nullable = false)
-    open var idRally: Rally? = null
+    open var rally: Rally? = null
 
     @OneToOne(mappedBy = "foto", cascade = [CascadeType.ALL], optional = false)
     open var resultado: Resultado? = null
 
-    @OneToMany(mappedBy = "idFoto")
+    @OneToMany(mappedBy = "foto")
     open var votos: MutableSet<Voto> = mutableSetOf()
 }

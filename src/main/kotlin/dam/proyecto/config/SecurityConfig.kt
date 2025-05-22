@@ -1,5 +1,6 @@
 package dam.proyecto.config
 
+import dam.proyecto.auth.JwtAuthFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -7,11 +8,13 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 
 @Configuration
 @EnableWebSecurity
-class SecurityConfig {
-
+class SecurityConfig(
+    private val jwtAuthFilter: JwtAuthFilter
+) {
 
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
@@ -21,30 +24,31 @@ class SecurityConfig {
                 it
                     .requestMatchers(
                         "/",
+                        "/uploads/**",
                         "/api/auth/**",
-                        "/api/rally/**"
-                        ).permitAll() // permite login y registro
-                it.anyRequest().authenticated()
+                        "/api/rally",
+                        "/api/photos/**"
+                    ).permitAll()
+
+                    .requestMatchers("/api/votos/**",
+                                    ).hasAnyRole("USUARIO", "ADMIN")
+
+                    .requestMatchers("/api/admin/**",
+                                     "/api/rally/modificar",
+                                     "/api/usuarios/**"
+                                    ).hasRole("ADMIN")
+
+                    .requestMatchers("/logout").denyAll()
+
+                    .anyRequest().authenticated()
             }
+            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter::class.java)
             .httpBasic { it.disable() }
             .formLogin { it.disable() }
             .logout { it.disable() }
 
         return http.build()
     }
-
-    /*
-    @Bean
-    fun userDetailsService(): UserDetailsService {
-        val user = User.builder()
-            .username("usuario")
-            .password(passwordEncoder().encode("1234"))
-            .roles("USER")
-            .build()
-        return InMemoryUserDetailsManager(user)
-    }
-
-     */
 
     @Bean
     fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder()

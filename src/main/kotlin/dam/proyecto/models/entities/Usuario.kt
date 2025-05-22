@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import dam.proyecto.models.enums.Roles
 import jakarta.persistence.*
 import lombok.Data
-import java.time.Instant
+import java.time.LocalDateTime
 
 @Entity
 @Table(name = "usuarios")
@@ -36,14 +36,20 @@ open class Usuario {
     open var rol: Roles? = null
 
     @Column(name = "fecha_registro", nullable = false)
-    open var fechaRegistro: Instant? = null
+    open var fechaRegistro: LocalDateTime? = null
 
-    @OneToMany(mappedBy = "idUsuario", cascade = [CascadeType.ALL])
+    @Column(name = "url_foto", nullable = true)
+    open var urlFoto: String? = null
+
+    @Column(name = "last_login", nullable = true)
+    open var lastLogin: LocalDateTime? = null
+
+    @OneToMany(mappedBy = "usuario", cascade = [CascadeType.ALL])
     open var fotosSubidas: MutableSet<Fotografia> = mutableSetOf()
 
     @OneToMany(mappedBy = "validador", cascade = [CascadeType.ALL])
     open var fotosValidadas: MutableSet<Fotografia> = mutableSetOf()
 
-    @OneToMany(mappedBy = "idVotante", cascade = [CascadeType.ALL])
+    @OneToMany(mappedBy = "votante", cascade = [CascadeType.ALL])
     open var votaciones: MutableSet<Voto> = mutableSetOf()
 }

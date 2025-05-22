@@ -1,6 +1,6 @@
 package dam.proyecto.services.impl
 
-import dam.proyecto.auth.ApiResponse
+import dam.proyecto.auth.responses.ApiResponse
 import dam.proyecto.models.dtos.RallyInfoDto
 import dam.proyecto.models.mappers.RallyMapper
 import dam.proyecto.repositories.RallyRepository

@@ -1,5 +1,6 @@
 package dam.proyecto.models.mappers
 
+import dam.proyecto.models.dtos.UsuarioRegistradoDto
 import dam.proyecto.models.dtos.UsuarioRegistroDto
 import dam.proyecto.models.entities.Usuario
 import org.mapstruct.Mapper
@@ -14,7 +15,7 @@ abstract class UsuarioMapper {
     //abstract fun toDto(usuario: Usuario): UsuarioDto
 
     abstract fun toRegistroEntity(usuarioRegistroDto: UsuarioRegistroDto): Usuario
-    abstract fun toRegistroDto(guardado: Usuario): UsuarioRegistroDto
+    abstract fun toRegistroDto(guardado: Usuario): UsuarioRegistradoDto
 
 
     //@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

@@ -1,6 +1,8 @@
 package dam.proyecto.services.impl
 
+import dam.proyecto.FechaUtils
 import dam.proyecto.models.dtos.UsuarioLoginDto
+import dam.proyecto.models.dtos.UsuarioRegistradoDto
 import dam.proyecto.models.dtos.UsuarioRegistroDto
 import dam.proyecto.models.mappers.UsuarioMapper
 import dam.proyecto.repositories.UsuarioRepository
@@ -18,15 +20,20 @@ class UsuarioServiceImpl(
         val usuario = usuarioRepository.findUsuarioByEmail(email) ?: return null
 
         return UsuarioLoginDto(
+            id = requireNotNull(usuario.id),
             email = requireNotNull(usuario.email),
             nombre = requireNotNull(usuario.nombre),
-            contrasenia = requireNotNull(usuario.contrasenia)
+            contrasenia = requireNotNull(usuario.contrasenia),
+            rol = requireNotNull(usuario.rol)
         )
     }
 
-    override fun registrar(usuarioRegistroDto: UsuarioRegistroDto): UsuarioRegistroDto? {
+    override fun registrar(usuarioRegistroDto: UsuarioRegistroDto): UsuarioRegistradoDto? {
         val usuarioEntity = usuarioMapper.toRegistroEntity(usuarioRegistroDto)
         val guardado = usuarioRepository.save(usuarioEntity)
         return usuarioMapper.toRegistroDto(guardado)
     }
+
+    override fun actualizarUltimoLoginPorId(idUsuario: Long): Boolean =
+        usuarioRepository.updateLastLoginById(idUsuario, FechaUtils.ahora()) > 0
 }

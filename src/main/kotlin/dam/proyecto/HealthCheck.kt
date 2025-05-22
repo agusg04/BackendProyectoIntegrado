@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class HealthCheck {
     @GetMapping("/")
-    fun healthCheck(): String {
-        return "Hola, esto funciona"
+    fun healthCheck(): Boolean {
+        return true
     }
 }
 

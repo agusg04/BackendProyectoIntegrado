@@ -4,7 +4,7 @@ import jakarta.persistence.*
 import lombok.Data
 import org.hibernate.annotations.OnDelete
 import org.hibernate.annotations.OnDeleteAction
-import java.time.Instant
+import java.time.LocalDateTime
 
 @Entity
 @Table(name = "votos")
@@ -18,13 +18,13 @@ open class Voto {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_foto", nullable = false)
-    open var idFoto: Fotografia? = null
+    open var foto: Fotografia? = null
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_votante", nullable = false)
-    open var idVotante: Usuario? = null
+    open var votante: Usuario? = null
 
     @Column(name = "fecha_voto", nullable = false)
-    open var fechaVoto: Instant? = null
+    open var fechaVoto: LocalDateTime? = null
 }

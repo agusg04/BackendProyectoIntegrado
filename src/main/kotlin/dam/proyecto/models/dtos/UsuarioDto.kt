@@ -2,7 +2,7 @@ package dam.proyecto.models.dtos
 
 import dam.proyecto.models.enums.Roles
 import java.io.Serializable
-import java.time.Instant
+import java.time.LocalDateTime
 
 /**
  * DTO for {@link dam.proyecto.models.entities.Usuario}
@@ -15,7 +15,7 @@ data class UsuarioDto(
     var apellido2: String? = null,
     var contrasenia: String? = null,
     var rol: Roles? = null,
-    var fechaRegistro: Instant? = null,
+    var fechaRegistro: LocalDateTime? = null,
     var fotosSubidaIds: MutableSet<Long>?,
     var fotosValidadaIds: MutableSet<Long>?,
     var votacioneIds: MutableSet<Long>?
