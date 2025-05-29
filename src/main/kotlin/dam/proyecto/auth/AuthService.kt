@@ -81,7 +81,7 @@ class AuthService(
         val accessToken = jwtService.generateAccessToken(usuario.email, usuario.id, usuario.rol)
         logger.info("Token access generado $accessToken")
         val refreshToken = jwtService.generateRefreshToken(usuario.email, usuario.id, usuario.rol)
-        logger.info("Token access generado $refreshToken")
+        logger.info("Token refresh generado $refreshToken")
 
         return ApiResponse(
             success = true,
@@ -133,6 +133,11 @@ class AuthService(
             return ApiResponse(success = false, message = "El formato del email no es válido")
         }
 
+        if (userService.existeEmail(request.email)) {
+            logger.error("Error en el registro: El email ${request.email} ya está registrado")
+            return ApiResponse(success = false, message = "El email ya está registrado")
+        }
+
         val usuarioRegistroDto = UsuarioRegistroDto(
             email = request.email,
             nombre = request.name,
@@ -153,7 +158,10 @@ class AuthService(
         logger.info("Usuario registrado: ${registrado.email}")
 
         val accessToken = jwtService.generateAccessToken(registrado.email, registrado.id, registrado.rol)
+        logger.info("Token access generado $accessToken")
         val refreshToken = jwtService.generateRefreshToken(registrado.email, registrado.id, registrado.rol)
+        logger.info("Token refresh generado $refreshToken")
+
 
         return ApiResponse(
             success = true,

@@ -13,6 +13,7 @@ import java.time.LocalDateTime
 interface UsuarioRepository : JpaRepository<Usuario, Long> {
     @Query("FROM Usuario u WHERE u.email = :email")
     fun findUsuarioByEmail(@Param("email") email: String): Usuario?
+
     fun findByEmail(@Param("email") email: String?): Usuario?
 
     @Transactional
@@ -28,4 +29,5 @@ interface UsuarioRepository : JpaRepository<Usuario, Long> {
     @Query("SELECT u.lastLogin FROM Usuario u WHERE u.id = :id")
     fun findLastLoginById(@Param("id") id: Long): LocalDateTime?
 
+    fun existsByEmail(email: String?): Boolean
 }

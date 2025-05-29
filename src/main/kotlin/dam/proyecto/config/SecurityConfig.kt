@@ -30,7 +30,7 @@ class SecurityConfig(
                         "/api/photos/**"
                     ).permitAll()
 
-                    .requestMatchers("/api/votos/**",
+                    .requestMatchers("/api/votes/**",
                                     ).hasAnyRole("USUARIO", "ADMIN")
 
                     .requestMatchers("/api/admin/**",

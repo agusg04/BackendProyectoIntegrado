@@ -12,7 +12,7 @@ data class RallyInfoDto(
     var fechaInicio: LocalDateTime? = null,
     var fechaFin: LocalDateTime? = null,
     var plazoVotacion: LocalDateTime? = null,
-    var votosPorUsuario: Int? = null,
+    var maxVotosUsuario: Int? = null,
     var maxFotosUsuario: Int? = null,
     var primerPremio: Int? = null,
     var segundoPremio: Int? = null,

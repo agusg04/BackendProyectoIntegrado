@@ -8,4 +8,5 @@ interface UsuarioService {
     fun obtenerUsuarioPorEmail(email: String): UsuarioLoginDto?
     fun registrar(usuarioRegistroDto: UsuarioRegistroDto): UsuarioRegistradoDto?
     fun actualizarUltimoLoginPorId(idUsuario: Long): Boolean
+    fun existeEmail(email: String): Boolean
 }

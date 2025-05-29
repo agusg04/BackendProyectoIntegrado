@@ -5,7 +5,6 @@ import dam.proyecto.auth.responses.ApiResponse
 import dam.proyecto.data.ListaVotos
 import dam.proyecto.models.dtos.VotoDto
 import dam.proyecto.models.mappers.VotoMapper
-import dam.proyecto.repositories.FotografiaRepository
 import dam.proyecto.repositories.VotoRepository
 import dam.proyecto.services.VotoService
 import org.slf4j.LoggerFactory
@@ -14,10 +13,11 @@ import org.springframework.stereotype.Service
 @Service
 class VotoServiceImpl(
     private val votoRepository: VotoRepository,
-    private val fotografiaRepository: FotografiaRepository,
+    private val fotografiaServiceImpl: FotografiaServiceImpl,
     private val votoMapper: VotoMapper,
+    private val resultadoServiceImpl: ResultadoServiceImpl
 
-) : VotoService {
+    ) : VotoService {
     private val logger = LoggerFactory.getLogger(VotoServiceImpl::class.java)
 
     override fun obtenerIdsFotosVotadasPorUsuario(idUsuario: Long): ApiResponse<ListaVotos>? {
@@ -39,9 +39,9 @@ class VotoServiceImpl(
     }
 
     override fun votar(idUsuario: Long, idFoto: Long): ApiResponse<Boolean> {
-        val foto = fotografiaRepository.findById(idFoto)
+        val foto = fotografiaServiceImpl.obtenerFoto(idFoto)
 
-        if (foto.isEmpty) {
+        if (foto.data == null) {
             return ApiResponse(
                 success = false,
                 message = "Fotografía no encontrada",
@@ -61,6 +61,16 @@ class VotoServiceImpl(
 
         val votoDto = VotoDto(idFoto, idUsuario, FechaUtils.ahora())
         val votoGuardado = votoRepository.save(votoMapper.toEntity(votoDto))
+
+        val resultadoFoto = resultadoServiceImpl.incrementarPuntaje(idFoto)
+        if (!resultadoFoto) {
+            votoRepository.delete(votoGuardado)
+            return ApiResponse(
+                success = false,
+                message = "No se pudo actualizar el puntaje de la foto",
+                data = false
+            )
+        }
 
         return if (votoGuardado.id != null) {
             ApiResponse(
@@ -88,6 +98,16 @@ class VotoServiceImpl(
         votoRepository.delete(voto)
 
         val votoSigueExistiendo = votoRepository.existsByVotanteIdAndFotoId(idUsuario, idFoto)
+
+        val resultadoFoto = resultadoServiceImpl.decrementarPuntaje(idFoto)
+        if (!resultadoFoto) {
+            votoRepository.save(voto)
+            return ApiResponse(
+                success = false,
+                message = "No se pudo actualizar el puntaje de la foto",
+                data = false
+            )
+        }
 
         return if (!votoSigueExistiendo) {
             logger.info("Voto del usuario $idUsuario eliminado correctamente")

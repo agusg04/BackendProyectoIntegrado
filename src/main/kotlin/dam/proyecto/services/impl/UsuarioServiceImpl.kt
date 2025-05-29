@@ -36,4 +36,8 @@ class UsuarioServiceImpl(
 
     override fun actualizarUltimoLoginPorId(idUsuario: Long): Boolean =
         usuarioRepository.updateLastLoginById(idUsuario, FechaUtils.ahora()) > 0
+
+    override fun existeEmail(email: String): Boolean {
+        return usuarioRepository.existsByEmail(email)
+    }
 }

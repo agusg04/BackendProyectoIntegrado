@@ -19,6 +19,6 @@ open class Resultado {
     @JoinColumn(name = "id_foto", nullable = false)
     open var foto: Fotografia? = null
 
-    @Column(name = "puntaje_total")
+    @Column(name = "puntaje_total", nullable = false)
     open var puntajeTotal: Int? = null
 }
