@@ -31,7 +31,7 @@ class SecurityConfig(
                     ).permitAll()
 
                     .requestMatchers("/api/votes/**",
-                                    ).hasAnyRole("USUARIO", "ADMIN")
+                                    ).hasAnyRole("USER", "ADMIN")
 
                     .requestMatchers("/api/admin/**",
                                      "/api/rally/modificar",
