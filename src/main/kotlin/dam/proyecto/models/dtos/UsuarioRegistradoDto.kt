@@ -11,5 +11,6 @@ data class UsuarioRegistradoDto(
     var apellido1: String,
     var apellido2: String,
     var rol: Roles,
+    var urlFoto: String?,
     var fechaRegistro: LocalDateTime
 ): Serializable

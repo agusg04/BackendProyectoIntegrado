@@ -3,9 +3,12 @@ package dam.proyecto.services.impl
 import dam.proyecto.FechaUtils
 import dam.proyecto.auth.responses.ApiResponse
 import dam.proyecto.data.ListaVotos
+import dam.proyecto.data.VotoUsuario
 import dam.proyecto.models.dtos.VotoDto
 import dam.proyecto.models.mappers.VotoMapper
 import dam.proyecto.repositories.VotoRepository
+import dam.proyecto.services.FotografiaService
+import dam.proyecto.services.ResultadoService
 import dam.proyecto.services.VotoService
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
@@ -13,11 +16,11 @@ import org.springframework.stereotype.Service
 @Service
 class VotoServiceImpl(
     private val votoRepository: VotoRepository,
-    private val fotografiaServiceImpl: FotografiaServiceImpl,
+    private val fotografiaServiceImpl: FotografiaService,
     private val votoMapper: VotoMapper,
-    private val resultadoServiceImpl: ResultadoServiceImpl
+    private val resultadoServiceImpl: ResultadoService
 
-    ) : VotoService {
+) : VotoService {
     private val logger = LoggerFactory.getLogger(VotoServiceImpl::class.java)
 
     override fun obtenerIdsFotosVotadasPorUsuario(idUsuario: Long): ApiResponse<ListaVotos>? {
@@ -123,5 +126,15 @@ class VotoServiceImpl(
                 data = false
             )
         }
+    }
+
+    override fun obtenerVotosUsuario(idUsuario: Long): Set<VotoUsuario> {
+        val votos = votoRepository.findVotosByVotante_Id(idUsuario)
+
+        if (votos.isEmpty()) {
+            return emptySet()
+        }
+
+        return votos.map { votoMapper.toVotoUsuario(it) }.toSet()
     }
 }

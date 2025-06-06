@@ -3,7 +3,7 @@ package dam.proyecto.controllers
 import dam.proyecto.auth.responses.ApiResponse
 import dam.proyecto.data.FotografiaPost
 import dam.proyecto.data.FotografiaWallData
-import dam.proyecto.services.impl.FotografiaServiceImpl
+import dam.proyecto.services.FotografiaService
 import org.springframework.core.io.Resource
 import org.springframework.http.HttpHeaders
 import org.springframework.http.ResponseEntity
@@ -16,7 +16,7 @@ import java.nio.file.Files
 @RestController
 @RequestMapping("/api/photos")
 class FotografiaController(
-    private val fotografiaService: FotografiaServiceImpl
+    private val fotografiaService: FotografiaService
 ) {
 
     @GetMapping

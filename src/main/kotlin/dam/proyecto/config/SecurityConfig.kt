@@ -33,9 +33,8 @@ class SecurityConfig(
                     .requestMatchers("/api/votes/**",
                                     ).hasAnyRole("USER", "ADMIN")
 
-                    .requestMatchers("/api/admin/**",
+                    .requestMatchers("/api/users/**",
                                      "/api/rally/modificar",
-                                     "/api/usuarios/**"
                                     ).hasRole("ADMIN")
 
                     .requestMatchers("/logout").denyAll()

@@ -4,7 +4,7 @@ import dam.proyecto.auth.UserPrincipal
 import dam.proyecto.auth.requests.VoteRequest
 import dam.proyecto.auth.responses.ApiResponse
 import dam.proyecto.data.ListaVotos
-import dam.proyecto.services.impl.VotoServiceImpl
+import dam.proyecto.services.VotoService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/api/votes")
 class VotoController(
-    private val votoService: VotoServiceImpl
+    private val votoService: VotoService
 ) {
     @GetMapping
     fun obtenerTodosParaUsuario(@AuthenticationPrincipal user: UserPrincipal): ResponseEntity<ApiResponse<ListaVotos>> {

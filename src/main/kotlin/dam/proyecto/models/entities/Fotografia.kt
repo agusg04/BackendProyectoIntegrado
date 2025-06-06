@@ -53,7 +53,7 @@ open class Fotografia {
     @JoinColumn(name = "id_rally", nullable = false)
     open var rally: Rally? = null
 
-    @OneToOne(mappedBy = "foto", cascade = [CascadeType.ALL], optional = false)
+    @OneToOne(mappedBy = "foto", cascade = [CascadeType.ALL], optional = true)
     open var resultado: Resultado? = null
 
     @OneToMany(mappedBy = "foto")

@@ -1,7 +1,9 @@
 package dam.proyecto.models.mappers
 
+import dam.proyecto.data.FotoUsuario
 import dam.proyecto.data.FotografiaPost
 import dam.proyecto.models.entities.Fotografia
+import dam.proyecto.models.enums.Estado
 import org.mapstruct.*
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
@@ -29,4 +31,16 @@ abstract class FotografiaMapper {
             resultadoPuntajeTotal = foto.resultado?.puntajeTotal
         )
     }
+
+    fun toFotoUsuario(foto: Fotografia): FotoUsuario {
+        return FotoUsuario(
+            fotoId = foto.id ?: 0L,
+            urlFoto = foto.filePath ?: "",
+            votos = foto.resultado?.puntajeTotal,
+            titulo = foto.titulo ?: "",
+            descripcion = foto.descripcion,
+            estado = foto.estado ?: Estado.PENDIENTE
+        )
+    }
+
 }

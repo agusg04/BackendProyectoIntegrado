@@ -1,5 +1,6 @@
 package dam.proyecto.models.mappers
 
+import dam.proyecto.data.VotoUsuario
 import dam.proyecto.models.dtos.VotoDto
 import dam.proyecto.models.entities.Voto
 import org.mapstruct.*
@@ -16,4 +17,8 @@ abstract class VotoMapper {
     @InheritConfiguration(name = "toEntity")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     abstract fun partialUpdate(votoDto: VotoDto, @MappingTarget voto: Voto): Voto
+
+    @Mapping(source = "id", target = "votoId")
+    @Mapping(source = "foto.filePath", target = "urlFoto")
+    abstract fun toVotoUsuario(voto: Voto): VotoUsuario
 }

@@ -1,8 +1,10 @@
 package dam.proyecto.auth.responses
 
+import dam.proyecto.data.UserData
+
 data class LoginResponse(
-    val nombre: String,
+    val userData: UserData,
     val accessToken: String,
-    val refreshToken: String
+    val refreshToken: String,
 )
 

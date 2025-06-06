@@ -12,4 +12,5 @@ interface VotoRepository : JpaRepository<Voto, Long> {
     fun findFotosIdsByVotanteId(@Param("idUsuario") idUsuario: Long): List<Long>?
     fun existsByVotanteIdAndFotoId(usuarioId: Long, fotografiaId: Long): Boolean
     fun findVotoByVotanteIdAndFotoId(usuarioId: Long, fotografiaId: Long): Voto?
+    fun findVotosByVotante_Id(idUsuario: Long): List<Voto>
 }

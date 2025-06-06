@@ -35,6 +35,7 @@ class JwtAuthFilter(
         val issuedAt = jwtService.extractIssuedAt(jwt)
 
         if (!jwtService.isTokenValid(jwt) || lastLogin == null || issuedAt?.isBefore(lastLogin) == true) {
+            //El token debe ser posterior al ultimo login del usuario si no no es valido
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token inválido o deslogueado")
             logger.error("El token $jwt no es valido")
             return

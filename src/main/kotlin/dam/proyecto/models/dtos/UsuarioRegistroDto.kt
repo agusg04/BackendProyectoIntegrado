@@ -1,5 +1,6 @@
 package dam.proyecto.models.dtos
 
+import com.fasterxml.jackson.annotation.JsonFormat
 import dam.proyecto.models.enums.Roles
 import java.io.Serializable
 import java.time.LocalDateTime
@@ -14,5 +15,7 @@ data class UsuarioRegistroDto(
     var apellido2: String,
     var contrasenia: String,
     var rol: Roles,
+    var urlFoto: String?,
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     var fechaRegistro: LocalDateTime
 ) : Serializable

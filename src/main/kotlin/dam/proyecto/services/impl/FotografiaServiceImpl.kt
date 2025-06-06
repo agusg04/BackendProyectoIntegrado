@@ -1,6 +1,7 @@
 package dam.proyecto.services.impl
 
 import dam.proyecto.auth.responses.ApiResponse
+import dam.proyecto.data.FotoUsuario
 import dam.proyecto.data.FotografiaPost
 import dam.proyecto.data.FotografiaWallData
 import dam.proyecto.models.mappers.FotografiaMapper
@@ -33,6 +34,16 @@ class FotografiaServiceImpl(
             message = "Muro de fotos devuelto con éxito",
             data = FotografiaWallData(photoSet)
         )
+    }
+
+    override fun obtenerFotosDeUsuario(idUsuario: Long): Set<FotoUsuario> {
+        val fotosUsuario = fotografiaRepository.findAllByUsuario_Id(idUsuario)
+
+        if (fotosUsuario.isEmpty()) {
+            return emptySet()
+        }
+
+        return fotosUsuario.map { fotografiaMapper.toFotoUsuario(it) }.toSet()
     }
 
     override fun obtenerFoto(id: Long): ApiResponse<FotografiaPost> {

@@ -28,6 +28,7 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.mapstruct:mapstruct:1.6.3")
 	implementation("io.jsonwebtoken:jjwt-api:0.11.5")
+	implementation("com.mysql:mysql-connector-j:9.3.0")
 	kapt("org.mapstruct:mapstruct-processor:1.6.3")
 
 	compileOnly("org.projectlombok:lombok")

@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository
 interface FotografiaRepository : JpaRepository<Fotografia, Long> {
     override fun findAll(): List<Fotografia>
     fun findAllByEstado(estado: Estado = Estado.ADMITIDA): List<Fotografia>
-    //fun findAllByUsuario_Id(idUsuario: Long): List<Fotografia>
+    fun findAllByUsuario_Id(idUsuario: Long): List<Fotografia>
 }

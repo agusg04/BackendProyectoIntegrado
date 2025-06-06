@@ -9,9 +9,12 @@ import dam.proyecto.auth.responses.ApiResponse
 import dam.proyecto.auth.responses.LoginResponse
 import dam.proyecto.auth.responses.RefreshTokenResponse
 import dam.proyecto.auth.responses.RegisterResponse
+import dam.proyecto.data.UserData
 import dam.proyecto.models.dtos.UsuarioRegistroDto
 import dam.proyecto.models.enums.Roles
+import dam.proyecto.services.FotografiaService
 import dam.proyecto.services.UsuarioService
+import dam.proyecto.services.VotoService
 import org.slf4j.LoggerFactory
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
@@ -20,6 +23,8 @@ import java.util.regex.Pattern
 @Service
 class AuthService(
     private val userService: UsuarioService,
+    private val fotografiaService: FotografiaService,
+    private val votoService: VotoService,
     private val jwtService: JwtService,
     private val passwordEncoder: PasswordEncoder,
 ) {
@@ -76,6 +81,9 @@ class AuthService(
             return ApiResponse(success = false, message = "No se pudo iniciar sesión")
         }
 
+        val fotosSubidas = fotografiaService.obtenerFotosDeUsuario(usuario.id)
+        val votos = votoService.obtenerVotosUsuario(usuario.id)
+
         logger.info("Usuario conectado: ${usuario.email}")
 
         val accessToken = jwtService.generateAccessToken(usuario.email, usuario.id, usuario.rol)
@@ -87,7 +95,17 @@ class AuthService(
             success = true,
             message = "Inicio de sesión exitoso",
             data = LoginResponse(
-                nombre = usuario.nombre,
+                userData = UserData(
+                    email = usuario.email,
+                    nombre = usuario.nombre,
+                    primerApellido = usuario.apellido1,
+                    segundoApellido = usuario.apellido2,
+                    rol = usuario.rol,
+                    urlFoto = usuario.urlFotoPerfil,
+                    fechaRegistro = usuario.fechaRegistro,
+                    fotosSubidas = fotosSubidas,
+                    votos = votos,
+                ),
                 accessToken = accessToken,
                 refreshToken = refreshToken
             )
@@ -145,6 +163,7 @@ class AuthService(
             apellido2 = request.lastName2,
             contrasenia = passwordEncoder.encode(request.password),
             rol = Roles.USER,
+            urlFoto = null,
             fechaRegistro = FechaUtils.ahora()
         )
 
@@ -179,8 +198,6 @@ class AuthService(
     }
 
     fun logout(tokens: LogoutRequest): ApiResponse<String> {
-
-        //jwtService.extractUserId(tokens.refreshToken)?.let { usuarioRepository.updateLastLoginById(it) }
 
         val userId = jwtService.extractUserId(tokens.refreshToken)
             ?: return ApiResponse(success = false, message = "Token inválido")
